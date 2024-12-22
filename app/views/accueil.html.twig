@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ parent() }}
+	Accueil
+{% endblock %}
+
+{% block contenu %}
+	<section class="d-flex justify-content-center align-items-center p-5 main-container">
+		<div class="accueil text-center">
+			<h1>Bienvenue sur notre application</h1>
+            <img src="../public/images/groupe.jpg" class="img-fluid w-25 h-auto rounded-5 mx-auto" alt="GROUPE">
+		</div>
+	</section>
+{% endblock %}

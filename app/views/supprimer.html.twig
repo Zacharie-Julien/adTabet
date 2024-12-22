@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Confirmation de suppression
+{% endblock %}
+
+{% block contenu %}
+    <div class="container mt-5">
+
+        <h1 class="text-center text-danger mb-4">Confirmation de suppression</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Détails de l'utilisateur :</h5>
+                <p><strong>Nom :</strong> {{ utilisateur.nom }} {{ utilisateur.pNom }}</p>
+                <p><strong>Nom d'utilisateur :</strong> {{ utilisateur.nom_utilisateur }}</p>
+                <p><strong>Email :</strong> {{ utilisateur.mail }}</p>
+
+                <h5 class="mt-4">Applications associées :</h5>
+                <ul class="list-group mb-3">
+                    {% for appli in applicationsAssociees %}
+                        <li class="list-group-item">{{ appli.libelle_appli }}</li>
+                    {% endfor %}
+                </ul>
+
+                <form method="post">
+                    <div class="form-group mb-4">
+                        <label for="id_appli"><strong>Choisissez l'application ou l'option de suppression complète :</strong></label>
+                        <select name="id_appli" id="id_appli" class="form-control">
+                            <option value="toutes">Supprimer l'utilisateur de toutes les applications</option>
+                            {% for appli in applicationsAssociees %}
+                                <option value="{{ appli.id_appli }}">{{ appli.libelle_appli }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+                        <a href="index.php?page=liste" class="btn btn-light">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

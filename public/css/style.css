@@ -1,0 +1,26 @@
+body {
+    background-color: rgb(255, 255, 255);
+    color: cadetblue;
+}
+
+.logo-lien{
+    color: cadetblue;
+    text-decoration: none;
+}
+
+.logo{
+    font-size: 1.5em;
+}
+
+.nav-link{
+    color: cadetblue;
+}
+
+.nav-link:hover{
+    color: rgb(72, 116, 117);
+}
+
+.img-fluid{
+    margin-top: 50px;
+    width: 550px !important;
+}

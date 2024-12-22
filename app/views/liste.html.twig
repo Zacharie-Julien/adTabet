@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+{{ parent() }} - Liste des utilisateurs
+{% endblock %}
+
+{% block contenu %}
+<h1 class = "text-center">Liste des utilisateurs</h1>
+
+<!-- Tableau des utilisateurs -->
+<table class="table p-5 mt-4 table-striped">
+<thead>
+<tr>
+<th>ID utilisateur</th>
+<th>Nom d'utilisateur</th>
+<th>Nom</th>
+<th>Prénom</th>
+<th>Email</th>
+<th>Rôle</th>
+<th>Application</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+{% for utilisateur in utilisateurs %}
+<tr>
+<td>{{ utilisateur.id_utilisateur }}</td>
+<td>{{ utilisateur.nom_utilisateur }}</td>
+<td>{{ utilisateur.nom }}</td>
+<td>{{ utilisateur.pNom }}</td>
+<td>{{ utilisateur.mail }}</td>
+<td>{{ utilisateur.libelle_rôle }}</td>
+<td>{{ utilisateur.applications }}</td>
+<td>
+<a href="index.php?page=supprime&id={{ utilisateur.id_utilisateur }}" class="btn btn-danger btn-sm">Supprimer</a>
+<button class="btn btn-primary btn-sm copy-btn" data-info="New-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Name '{{ utilisateur.nom }} {{ utilisateur.pNom }}' -AccountPassword (ConvertTo-SecureString '{{ utilisateur.mdp }}' -AsPlainText -Force) -Path '{{ utilisateur.libelle_rôle }}' -Enabled \$true\">AD Ajout</button>
+<button class="btn btn-primary btn-sm copy-btn" data-info="Remove-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Confirm:$false ">AD Suppression</button>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        copyButtons.forEach(button => {
+            const originalText = button.textContent;
+
+            button.addEventListener('click', () => {
+                const infoToCopy = button.getAttribute('data-info');
+
+                navigator.clipboard.writeText(infoToCopy).then(() => {
+                    button.textContent = 'Copié !';
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-success');
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-primary');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Erreur lors de la copie : ', err);
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock %}

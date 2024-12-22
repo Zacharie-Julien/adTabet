@@ -1,0 +1,95 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ parent() }} - Liste des utilisateurs
+{% endblock %}
+
+{% block contenu %}
+	<form action="index.php?page=upload" method="post" enctype="multipart/form-data">
+		<label for="file" class = "text-center">Choisissez un fichier :</label>
+		<input type="file" name="file" id="file">
+		<input type="submit" value="Téléverser">
+	</form>
+	<h1 class = "text-center" >Liste des utilisateurs AD</h1>
+
+	<!-- Tableau des utilisateurs -->
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Nom d'utilisateur</th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>Email</th>
+				<th>Rôle</th>
+				<th>Application</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for utilisateur in utilisateurs %}
+				<tr>
+					<td>{{ utilisateur.nom_utilisateur }}</td>
+					<td>{{ utilisateur.nom }}</td>
+					<td>{{ utilisateur.pNom }}</td>
+					<td>{{ utilisateur.mail }}</td>
+					<td>{{ utilisateur.libelle_rôle }}</td>
+					<td>{{ utilisateur.libelle_appli }}</td>
+					<td>
+						<a href="index.php?page=ajout&nom_utilisateur={{ utilisateur.nom_utilisateur }}&nom={{ utilisateur.nom }}&pNom={{ utilisateur.pNom }}&mdp={{ utilisateur.pNom }}&mail={{ utilisateur.mail }}&id_role={{ utilisateur.id_rôle }}&id_appli[]={{ utilisateur.id_appli }}" class="btn btn-success btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir ajouter cet utilisateur en BDD ?')">Ajouter en BDD</a>
+						<button class="btn btn-primary btn-sm copy-btn" data-info="New-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Name '{{ utilisateur.nom }} {{ utilisateur.pNom }}' -AccountPassword (ConvertTo-SecureString '{{ utilisateur.mdp }}' -AsPlainText -Force) -Path '{{ utilisateur.libelle_rôle }}' -Enabled \$true\">Copier Ajout</button>
+						<button class="btn btn-primary btn-sm copy-btn" data-info="Remove-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Confirm:$false ">Copier Suppression</button>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<h1 class = "text-center" >Liste des utilisateurs en BDD</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Nom d'utilisateur</th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>Email</th>
+				<th>Rôle</th>
+				<th>Application</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for utilisateur in bddUtilisateurs %}
+				<tr>
+					<td>{{ utilisateur.nom_utilisateur }}</td>
+					<td>{{ utilisateur.nom }}</td>
+					<td>{{ utilisateur.pNom }}</td>
+					<td>{{ utilisateur.mail }}</td>
+					<td>{{ utilisateur.libelle_rôle }}</td>
+					<td>{{ utilisateur.applications }}</td>
+					<td>
+						<button class="btn btn-primary btn-sm copy-btn" data-info="New-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Name '{{ utilisateur.nom }} {{ utilisateur.pNom }}' -AccountPassword (ConvertTo-SecureString '{{ utilisateur.mdp }}' -AsPlainText -Force) -Path '{{ utilisateur.libelle_rôle }}' -Enabled \$true\">Copier Ajout</button>
+						<button class="btn btn-primary btn-sm copy-btn" data-info="Remove-ADUser -SamAccountName '{{ utilisateur.nom_utilisateur }}' -Confirm:$false ">Copier Suppression</button>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+
+	<script>
+		// Ajouter un événement sur les boutons Copier
+		document.addEventListener('DOMContentLoaded', () => {
+			const copyButtons = document.querySelectorAll('.copy-btn');
+
+			copyButtons.forEach(button => {
+				button.addEventListener('click', () => {
+					const infoToCopy = button.getAttribute('data-info');
+					
+					// Copier dans le presse-papiers
+					navigator.clipboard.writeText(infoToCopy)
+				});
+			});
+		});
+	</script>
+
+{% endblock %}
